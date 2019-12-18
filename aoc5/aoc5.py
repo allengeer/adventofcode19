@@ -12,8 +12,7 @@ def multiply(program, loc, ptypestr):
     program[program[loc+2]] = (program[loc] if isImm(0,ptypestr) else program[program[loc]]) * (program[loc+1] if isImm(1,ptypestr) else program[program[loc+1]])
 
 def inputValue(program, loc):
-    x = input()
-    program[program[loc]] = x
+    program[program[loc]] = input()
 
 def outputValue(program, loc, ptypestr):
     print (program[loc] if isImm(0,ptypestr) else program[program[loc]])
