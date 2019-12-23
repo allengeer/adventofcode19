@@ -6,33 +6,33 @@ def isRelative(p, ptypestr):
 
 def getParameter(computer, pNum):
     if isImm(pNum, computer.ptypestr):
-        return computer.program[computer.instructionPointer+ 1 + pNum]
+        return computer.program[computer.instructionPointer + 1 + pNum]
     elif isRelative(pNum, computer.ptypestr):
         return computer.program[computer.program[computer.instructionPointer + 1 + pNum] + computer.relativeBase]
     else:
-        return computer.program[computer.program[computer.instructionPointer + 1+ pNum]]
+        return computer.program[computer.program[computer.instructionPointer + 1 + pNum]]
 
 def add(computer):
     if isRelative(2, computer.ptypestr):
         computer.program[computer.program[computer.instructionPointer + 3] + computer.relativeBase] = getParameter(computer, 0) + getParameter(computer, 1)
     else:
-        computer.program[computer.program[computer.instructionPointer+3]] = getParameter(computer, 0) + getParameter(computer, 1)
+        computer.program[computer.program[computer.instructionPointer + 3]] = getParameter(computer, 0) + getParameter(computer, 1)
 
 def multiply(computer):
     if isRelative(2, computer.ptypestr):
         computer.program[computer.program[computer.instructionPointer + 3] + computer.relativeBase] = getParameter(computer, 0) * getParameter(computer, 1)
     else:
-        computer.program[computer.program[computer.instructionPointer+3]] = getParameter(computer, 0) * getParameter(computer, 1)
+        computer.program[computer.program[computer.instructionPointer + 3]] = getParameter(computer, 0) * getParameter(computer, 1)
 
 def inputValue(computer):
     if isRelative(0, computer.ptypestr):
-        computer.program[computer.program[computer.instructionPointer + 1] + computer.relativeBase] = computer.inputBuffer.pop(0) if computer.inputBuffer else input()
+        computer.program[computer.program[computer.instructionPointer + 1] + computer.relativeBase] = computer.inputBuffer.pop(0) if computer.inputBuffer else int(input())
     else:
-        computer.program[computer.program[computer.instructionPointer + 1]] = getParameter(computer, 0) + getParameter(computer, 1)
+        computer.program[computer.program[computer.instructionPointer + 1]] = computer.inputBuffer.pop(0) if computer.inputBuffer else int(input())
 
 def outputValue(computer):
     val = getParameter(computer, 0)
-    if computer.printToConsole: print val
+    if computer.printToConsole: print(val)
     return val
 
 def jumpIfTrue(computer):
@@ -51,13 +51,13 @@ def lessThan(computer):
     if isRelative(2, computer.ptypestr):
         computer.program[computer.program[computer.instructionPointer + 3] + computer.relativeBase] = int(getParameter(computer, 0) < getParameter(computer, 1))
     else:
-        computer.program[computer.program[computer.instructionPointer+3]] = int(getParameter(computer, 0) < getParameter(computer, 1))
+        computer.program[computer.program[computer.instructionPointer + 3]] = int(getParameter(computer, 0) < getParameter(computer, 1))
 
 def equals(computer):
     if isRelative(2, computer.ptypestr):
         computer.program[computer.program[computer.instructionPointer + 3] + computer.relativeBase] = int(getParameter(computer, 0) == getParameter(computer, 1))
     else:
-        computer.program[computer.program[computer.instructionPointer+3]] = int(getParameter(computer, 0) == getParameter(computer, 1))
+        computer.program[computer.program[computer.instructionPointer + 3]] = int(getParameter(computer, 0) == getParameter(computer, 1))
 
 def modifyRelativeBase(computer):
     computer.relativeBase += getParameter(computer, 0)
@@ -88,7 +88,7 @@ class IntcodeComputer:
     def execute(self):
         while self.program[self.instructionPointer] != 99:
             instruction = self.program[self.instructionPointer] % 100
-            self.ptypestr = ''.join(reversed(str((self.program[self.instructionPointer] - instruction) / 100).zfill(3)))
+            self.ptypestr = ''.join(reversed(str(int((self.program[self.instructionPointer] - instruction) / 100)).zfill(3)))
             if instruction == 1:
                 add(self)
                 self.instructionPointer += 4
@@ -117,7 +117,7 @@ class IntcodeComputer:
                 modifyRelativeBase(self)
                 self.instructionPointer += 2
             else:
-                print "Improper Instruction %s at Location" %instruction, self.instructionPointer
+                print ("Improper Instruction %s at Location" %instruction, self.instructionPointer)
                 self.halted = True
                 return
         self.halted = True

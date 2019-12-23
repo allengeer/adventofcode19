@@ -4,4 +4,4 @@ from intcode import IntcodeComputer
 inputProgram =  list(loadtxt("input.txt", delimiter=",", dtype=int))
 
 computer = IntcodeComputer(inputProgram)
-print computer.execute().outputBuffer
+print (computer.execute().outputBuffer)

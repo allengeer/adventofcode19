@@ -1,1 +1,2 @@
-from intcode import *
+from intcode.intcode import IntcodeComputer
+
