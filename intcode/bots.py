@@ -132,6 +132,59 @@ class RepairBot:
             self.location = return_to
 
 
+class ASCIIBot:
+    SCAFFOLD = 35
+    EMPTY = 46
+    NEWLINE = 10
+    LOOKINGUP = 94
+
+    def __init__(self, camera_input):
+        self.camera_input = camera_input
+        self.current_position = ()
+        self.scaffold_map = self.parse_map(camera_input)
+
+    def parse_map(self, camera_output):
+        row = -1
+        col = 0
+        map_of_values = []
+        cur_row = []
+        for i in range(len(camera_output)):
+            if camera_output[i] == self.NEWLINE:
+                map_of_values.append(cur_row)
+                cur_row = []
+                col = row = 0
+            else:
+                if camera_output[i] == self.LOOKINGUP:
+                    self.current_position = (col, row)
+                cur_row.append(camera_output[i])
+                col += 1
+        map_of_values.append(cur_row)
+        return map_of_values[:-2]
+
+    def is_intersection(self, row, col):
+        if row < 1 or row == len(self.scaffold_map)-1:
+            return False
+        if col < 1 or col == len(self.scaffold_map[0])-1:
+            return False
+        return self.scaffold_map[row][col] == self.SCAFFOLD and self.scaffold_map[row-1][col] == self.SCAFFOLD and self.scaffold_map[row+1][col] == self.SCAFFOLD and self.scaffold_map[row][col-1] == self.SCAFFOLD and self.scaffold_map[row][col+1] == self.SCAFFOLD
+
+    def alignment_parameter(self, row, col):
+        return row * col
+
+    def sum_of_alignment_parameter(self):
+        total = 0
+        for row in range(len(self.scaffold_map)):
+            for col in range(len(self.scaffold_map[0])):
+                # print ("%s, %s" %(row, col), end=" - ")
+                # print ("%s" %self.is_intersection(row, col) , end = " - ")
+                total += self.alignment_parameter(row, col) if self.is_intersection(row,col) else 0
+                # print ("%s" %total)
+        return total
+
+    def print_camera_map(self):
+        print(''.join(list(map(lambda x: chr(x-1) if x != 10 else chr(10), self.camera_input))))
+
+
 
 
 

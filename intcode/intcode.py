@@ -65,7 +65,7 @@ def modifyRelativeBase(computer):
 
 class IntcodeComputer:
     def __init__(self, program, inputBuffer = None, outputBuffer = None, haltOnOutput = False, printToConsole=False):
-        self.program = program + [0] * 1000
+        self.program = program + [0] * 5000
         self.instructionPointer = 0
         self.inputBuffer = inputBuffer if inputBuffer else []
         self.outputBuffer = outputBuffer if outputBuffer else []
